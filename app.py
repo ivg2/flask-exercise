@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3i
 
 from typing import Tuple
 
 from flask import Flask, jsonify, request, Response
 import mockdb.mockdb_interface as db
 
-app = Flask(isabel-greiner)
+app = Flask(__name__)
 
 
 def create_response(
@@ -29,7 +29,6 @@ def create_response(
     if type(data) is not dict and data is not None:
         raise TypeError("Data should be a dictionary 😞")
         status = 404
-	message = "There is no user with that id."
 
 
     response = {
@@ -57,19 +56,23 @@ def mirror(name):
 
 @app.rout("/users")
 def get_users():
-    return create_response(db.get("user")
+    return create_response(db.get("user"))
 
-@app.rout("/users/<id>")
-def get_user():
-    return create_response(db.getById(user, id)
+@app.rout("/users/<identifier>")
+def get_user(identifier):
+    return create_response(db.getById(user, identifier))
 
 @app.rout("/users")
-def get_user_with_team:
-   team = request.args.get('param') 
-   users = db.get("user");
-   usersInTeam = {}
+def get_user_with_team():
+    team = request.args.get('param') 
+    users = db.get("user");
+    usersInTeam = {}
 
-   for k in users.items():
+    for k in users.items():
+        if (users[k]["team"] == team):
+            usersInTeam['users'] = k
+   
+    return create_response(usersInTeam)
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
