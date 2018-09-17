@@ -52,27 +52,27 @@ def mirror(name):
     data = {"name": name}
     return create_response(data)
 
-@app.rout("/users", methods=["GET"])
+@app.route("/users", methods=["GET"])
 def get_users():
-    team = request.args.get('param')
+    team = request.args.get('team')
     if not team:
         return create_response({"users": db.get("users")})
     users = db.get("users")
     usersInTeam = [u for u in users if u["team"] == team]
     return create_response({"users": usersInTeam})
 
-@app.rout("/users/<identifier>", methods=["GET"])
+@app.route("/users/<identifier>", methods=["GET"])
 def get_user(identifier):
     return create_response(db.getById(user, identifier))
 
-@app.rout("/users", methods=["POST"])
+@app.route("/users", methods=["POST"])
 def post_user():
     name = request.args.get('name')
     age = request.args.get('age')
     team = request.args.get('team')
 
     if not name or not age or not team:
-        
+        return create_response(db.getById(user, identifier))        
     
 
 """
