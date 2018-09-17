@@ -63,7 +63,9 @@ def get_users():
 
 @app.route("/users/<identifier>", methods=["GET"])
 def get_user(identifier):
-    return create_response(db.getById(user, identifier))
+    users = db.get("users")
+    usersWithID = [u for u in users if u["id"] == identifier]
+    return create_response({"users": usersWithID})
 
 @app.route("/users", methods=["POST"])
 def post_user():
@@ -71,9 +73,16 @@ def post_user():
     age = request.args.get('age')
     team = request.args.get('team')
 
+    data = {"name": name, "age": age, "team": team}
+
     if not name or not age or not team:
-        return create_response(db.getById(user, identifier))        
+        return create_response(db.getById(user, identifier))     
+
+    return db.create("users", data)
     
+@app.route("/users/<id>", methods=["DELETE"])
+def delete_user(identifier):
+    return db.deleteById("users", identifier)
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
