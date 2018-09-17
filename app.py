@@ -1,5 +1,3 @@
-#!/usr/bin/env python3i
-
 from typing import Tuple
 
 from flask import Flask, jsonify, request, Response
@@ -54,25 +52,28 @@ def mirror(name):
     data = {"name": name}
     return create_response(data)
 
-@app.rout("/users")
+@app.rout("/users", methods=["GET"])
 def get_users():
-    return create_response(db.get("user"))
+    team = request.args.get('param')
+    if not team:
+        return create_response({"users": db.get("users")})
+    users = db.get("users")
+    usersInTeam = [u for u in users if u["team"] == team]
+    return create_response({"users": usersInTeam})
 
-@app.rout("/users/<identifier>")
+@app.rout("/users/<identifier>", methods=["GET"])
 def get_user(identifier):
     return create_response(db.getById(user, identifier))
 
-@app.rout("/users")
-def get_user_with_team():
-    team = request.args.get('param') 
-    users = db.get("user");
-    usersInTeam = {}
+@app.rout("/users", methods=["POST"])
+def post_user():
+    name = request.args.get('name')
+    age = request.args.get('age')
+    team = request.args.get('team')
 
-    for k in users.items():
-        if (users[k]["team"] == team):
-            usersInTeam['users'] = k
-   
-    return create_response(usersInTeam)
+    if not name or not age or not team:
+        
+    
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
